@@ -10,6 +10,7 @@ import api from "../api";
 import { useRouter } from "next/router";
 import styles from "../styles/Home.module.css";
 import { auth } from "../firebase";
+import { WelcomeBg } from "../components/dashboard";
 
 // const cookies = new Cookies();
 // const authToken = cookies.get("token");
@@ -45,16 +46,6 @@ export default function Home() {
     return <RegisterForm />;
   }
 
-  // export function getUserAuth() {
-  //   return (dispatch) => {
-  //     auth.onAuthStateChanged(async (user) => {
-  //       if (user) {
-  //         dispatch(setUser(user));
-  //       }
-  //     });
-  //   };
-  // }
-
   return (
     <>
       <Head>
@@ -65,6 +56,7 @@ export default function Home() {
       <DashboardLayout>
         your login info is
         {user.displayName} {"   "} {user.email}
+        <WelcomeBg />
       </DashboardLayout>
     </>
   );
