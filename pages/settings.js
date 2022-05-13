@@ -353,3 +353,58 @@ const Login = () => {
 export default Login;
 
   
+const initialValues = {
+  email: "",
+  firstName: "",
+  lastName: "",
+  password: "",
+  policy: false,
+};
+
+//state to state to setform and create a switchmode between login and registration form
+const [form, setForm] = useState(initialValues);
+const [isSignup, setIsSignup] = useState(true);
+
+const handleChange = (event) => {
+  setForm({ ...form, [e.target.name]: e.target.value });
+};
+
+const handleFormChange = (e) => {};
+
+// Create new account using email/password
+const handleSubmit = async () => {
+  const { firstName, email, lastName, password } = form;
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+  } catch (error) {
+    console.log(`There was an error: ${error}`);
+    showLoginError(error);
+  }
+};
+
+const handleSubmitS = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await axios.post(
+      REGISTER_URL,
+      JSON.stringify({ ...form }),
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    );
+    // TODO: remove console.logs before deployments
+    console.log(JSON.stringify(response?.data));
+    //console.log(JSON.stringify(response))
+    setSuccess(true);
+    setForm(initialValues);
+  } catch (error) {
+    if (!error?.response) {
+      setErrMsg("No Server Response");
+    } else if (error.response?.status === 409) {
+      setErrMsg("Username taken");
+    } else {
+      setErrMsg("Registration failed");
+    }
+  }
+};
