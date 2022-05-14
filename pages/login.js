@@ -14,13 +14,40 @@ import {
 } from "@mui/material";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import swal from "sweetalert";
+import { auth } from "../firebase";
+
+/// initiallizing axios fetch for api
+const loginUser = async (credentials) => {
+  axios({
+    method: "post",
+    url: "https://myjournserver.herokuapp.com/auth/signup",
+    data: credentials,
+    headers: { "Content-Type": "multipart/form-data" },
+  })
+    .then((data) => {
+      console.log("====================================");
+      console.log(data);
+      console.log("====================================");
+      data.json();
+    })
+    .catch((error) => {
+      if (error) {
+        console.log("====================================");
+        console.log(error.response.data);
+        console.log("====================================");
+      } else {
+        return console.log("User successful");
+      }
+    });
+};
 
 const Signin = () => {
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: " ",
+      password: " ",
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -29,8 +56,23 @@ const Signin = () => {
         .required("Email is required"),
       password: Yup.string().max(255).required("Password is required"),
     }),
-    onSubmit: () => {
-      router.push("/");
+    onSubmit: ({ email, password }) => {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          /// signed in as user crediential is allowed
+          const user = userCredential.user;
+          router.push("/");
+          swal("Success", user.message, "success", {
+            buttons: false,
+            timer: 2000,
+          });
+          console.log("submited by formik");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          swal("Failed", error.message, "error");
+        });
     },
   });
 
@@ -116,6 +158,7 @@ const Signin = () => {
               onChange={formik.handleChange}
               type="email"
               value={formik.values.email}
+              //value={" "}
               variant="outlined"
             />
             <TextField

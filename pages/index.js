@@ -23,28 +23,33 @@ export default function Home() {
   if (typeof window !== "undefined") {
     // Perform localStorage action
     const token = localStorage.getItem("accessToken");
-  }
-
-  useEffect(() => {
-    // Perform localStorage action
-    const token = localStorage.getItem("accessToken");
-    // if (!token) {
-    //   return <RegisterForm />;
-    // }
-  }, []);
-  const [displayEmail, setDisplayEmail] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const user = auth.currentUser;
-  if (user !== null) {
-    const displayName = user.displayName;
-    const email = user.email;
-    const photoURL = user.photoURL;
-    const emailVerified = user.emailVerified;
-
-    const uid = user.uid;
+    if (!token) {
+      return <RegisterForm />;
+    }
   } else {
     return <RegisterForm />;
   }
+
+  // useEffect(() => {
+  //   // Perform localStorage action
+  //   const token = localStorage.getItem("accessToken");
+  //   // if (!token) {
+  //   //   return <RegisterForm />;
+  //   // }
+  // }, []);
+  // const [displayEmail, setDisplayEmail] = useState("");
+  // const [displayName, setDisplayName] = useState("");
+  // const user = auth.currentUser;
+  // if (user !== null) {
+  //   const displayName = user.displayName;
+  //   const email = user.email;
+  //   const photoURL = user.photoURL;
+  //   const emailVerified = user.emailVerified;
+
+  //   const uid = user.uid;
+  // } else {
+  //   return <RegisterForm />;
+  // }
 
   return (
     <>
@@ -55,7 +60,6 @@ export default function Home() {
       </Head>
       <DashboardLayout>
         your login info is
-        {user.displayName} {"   "} {user.email}
         <WelcomeBg />
       </DashboardLayout>
     </>

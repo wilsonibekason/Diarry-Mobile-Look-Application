@@ -38,9 +38,42 @@ import Login from "./login";
 import { setRequestMeta } from "next/dist/server/request-meta";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from ".././firebase";
+import swal from "sweetalert";
+import axios from "axios";
 const cookies = new Cookies();
 //const auth = getAuth();
+const loginUser = async (credentials) => {
+  // axios
+  //   .post("https://myjournserver.herokuapp.com/auth/login", {
+  //     headers: {
+  //       "Content-Type": "multipart/form-data",
+  //     },
 
+  //     //body: JSON.stringify(credentials),
+  //     //body: credentials,
+  //   })
+  axios({
+    method: "post",
+    url: "https://myjournserver.herokuapp.com/auth/signup",
+    data: credentials,
+    headers: { "Content-Type": "multipart/form-data" },
+  })
+    .then((data) => {
+      console.log("====================================");
+      console.log(data);
+      console.log("====================================");
+      data.json();
+    })
+    .catch((error) => {
+      if (error) {
+        console.log("====================================");
+        console.log(error.response.data);
+        console.log("====================================");
+      } else {
+        return console.log("User successful");
+      }
+    });
+};
 /** creating functional component */
 const RegisterForm = () => {
   const theme = useTheme();
@@ -59,23 +92,31 @@ const RegisterForm = () => {
         .email("Must be a valid email")
         .max(255)
         .required("Email is required"),
-      firstName: Yup.string().max(255).required("First name is required"),
+      username: Yup.string().max(255).required("First name is required"),
       lastName: Yup.string().max(255).required("Last name is required"),
       password: Yup.string().max(255).required("Password is required"),
       policy: Yup.boolean().oneOf([true], "This field must be checked"),
     }),
-    onSubmit: ({ email, password }) => {
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          /// signed in as user crediential is allowed
-          const user = userCredential.user;
-          router.push("/");
-          console.log("submited by formik");
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
+    onSubmit: async ({ email, password, username }) => {
+      //e.preventDefault();
+      const response = await loginUser({
+        email,
+        password,
+        username,
+        SignUpType: "email",
+      });
+      if ("accessToken" in response) {
+        swal("Success", response.message, "success", {
+          buttons: false,
+          timer: 2000,
+        }).then((value) => {
+          localStorage.setItem("accessToken", response["accessToken"]);
+          localStorage.setItem("user", JSON.stringify(response["user"]));
+          window.location.href = "/profile";
         });
+      } else {
+        swal("Failed", response.message, "error");
+      }
     },
   });
 
@@ -114,16 +155,16 @@ const RegisterForm = () => {
             <Grid container spacing={3}>
               <TextField
                 error={Boolean(
-                  formik.touched.firstName && formik.errors.firstName
+                  formik.touched.username && formik.errors.username
                 )}
                 fullWidth
-                helperText={formik.touched.firstName && formik.errors.firstName}
-                label="First Name"
+                helperText={formik.touched.username && formik.errors.username}
+                label="Username"
                 margin="normal"
-                name="firstName"
+                name="username"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.firstName}
+                value={formik.values.username}
                 variant="outlined"
               />
               <TextField
