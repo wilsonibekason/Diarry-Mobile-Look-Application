@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+import SearchBar from "./SearchBar";
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -42,13 +43,13 @@ export const DashboardNavbar = (props) => {
           </IconButton>
           <Tooltip title="Search">
             <IconButton sx={{ ml: 1 }}>
-              <SearchIcon fontSize="small" />
+              <SearchBar />
             </IconButton>
           </Tooltip>
-          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ flexGrow: 5 }} />
           <Tooltip title="Search">
             <IconButton sx={{ ml: 1 }}>
-              <SearchIcon fontSize="small" />
+              <SearchBar />
             </IconButton>
           </Tooltip>
           <Tooltip title="Contacts">
