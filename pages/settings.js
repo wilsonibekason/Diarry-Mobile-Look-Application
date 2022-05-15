@@ -408,3 +408,35 @@ const handleSubmitS = async (e) => {
     }
   }
 };
+
+
+
+createUserWithEmailAndPassword(auth, email, password)
+.then((userCredential) => {
+  /// signed in as user crediential is allowed
+  const user = userCredential.user;
+  router.push("/");
+  console.log("submited by formik");
+})
+.catch((error) => {
+  const errorCode = error.code;
+  const errorMessage = error.message;
+});
+
+// ffor login 
+signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          /// signed in as user crediential is allowed
+          const user = userCredential.user;
+          router.push("/");
+          swal("Success", user.message, "success", {
+            buttons: false,
+            timer: 2000,
+          });
+          console.log("submited by formik");
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          swal("Failed", error.message, "error");
+        });

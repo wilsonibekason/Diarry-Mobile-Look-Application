@@ -20,14 +20,15 @@ import { WelcomeBg } from "../components/dashboard";
 // }
 
 export default function Home() {
+  const router = useRouter();
   if (typeof window !== "undefined") {
     // Perform localStorage action
     const token = localStorage.getItem("accessToken");
     if (!token) {
-      return <RegisterForm />;
+      return router.push("/register");
     }
   } else {
-    return <RegisterForm />;
+    return router.push("/register");
   }
 
   // useEffect(() => {

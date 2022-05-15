@@ -40,18 +40,10 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from ".././firebase";
 import swal from "sweetalert";
 import axios from "axios";
+import api from "../api/axios_config";
 const cookies = new Cookies();
 //const auth = getAuth();
-const loginUser = async (credentials) => {
-  // axios
-  //   .post("https://myjournserver.herokuapp.com/auth/login", {
-  //     headers: {
-  //       "Content-Type": "multipart/form-data",
-  //     },
-
-  //     //body: JSON.stringify(credentials),
-  //     //body: credentials,
-  //   })
+const RegisterUser = async (credentials) => {
   axios({
     method: "post",
     url: "https://myjournserver.herokuapp.com/auth/signup",
@@ -99,7 +91,7 @@ const RegisterForm = () => {
     }),
     onSubmit: async ({ email, password, username }) => {
       //e.preventDefault();
-      const response = await loginUser({
+      const response = await RegisterUser({
         email,
         password,
         username,
