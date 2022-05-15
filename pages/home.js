@@ -5,7 +5,7 @@ import { WelcomeBg } from "../components/dashboard";
 export default function Homes() {
   return (
     <div>
-      <DashboardLayout>yojewur login info is uhh</DashboardLayout>
+      <DashboardLayout>your login info is</DashboardLayout>
     </div>
   );
 }
